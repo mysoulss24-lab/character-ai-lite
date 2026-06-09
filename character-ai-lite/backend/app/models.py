@@ -16,6 +16,8 @@ class Character(Base):
     nationality = Column(String, default="Unknown")
     appearance = Column(Text, default="")
     speaking_style = Column(Text, default="")
+    user_description = Column(Text, default="")
+    additional_characters = Column(Text, default="[]")
 
     chats = relationship("Chat", back_populates="character", cascade="all, delete")
 
@@ -28,6 +30,7 @@ class Chat(Base):
     title = Column(String)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now(), server_default=func.now())
+    is_saved = Column(Boolean, default=False)
 
     character = relationship("Character", back_populates="chats")
     messages = relationship("Message", back_populates="chat", cascade="all, delete")

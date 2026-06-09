@@ -30,3 +30,10 @@ def delete_chat(chat_id: int, db: Session = Depends(get_db)):
     if db_chat is None:
         raise HTTPException(status_code=404, detail="Chat not found")
     return db_chat
+
+@router.put("/{chat_id}/save", response_model=schemas.ChatResponse)
+def save_chat(chat_id: int, db: Session = Depends(get_db)):
+    db_chat = crud.save_chat(db, chat_id)
+    if db_chat is None:
+        raise HTTPException(status_code=404, detail="Chat not found")
+    return db_chat

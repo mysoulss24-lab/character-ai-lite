@@ -22,6 +22,7 @@ export default {
   getChats: () => apiClient.get('/chats'),
   getChat: (id) => apiClient.get(`/chats/${id}`),
   createChat: (data) => apiClient.post('/chats', data),
+  saveChat: (id) => apiClient.put(`/chats/${id}/save`),
   deleteChat: (id) => apiClient.delete(`/chats/${id}`),
   
   // Messages

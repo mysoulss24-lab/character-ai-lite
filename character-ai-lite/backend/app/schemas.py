@@ -13,6 +13,8 @@ class CharacterBase(BaseModel):
     nationality: Optional[str] = "Unknown"
     appearance: Optional[str] = ""
     speaking_style: Optional[str] = ""
+    user_description: Optional[str] = ""
+    additional_characters: Optional[str] = "[]"
 
 class CharacterCreate(CharacterBase):
     pass
@@ -46,6 +48,7 @@ class MessageSend(BaseModel):
 # Chat Schemas
 class ChatBase(BaseModel):
     title: str
+    is_saved: Optional[bool] = False
 
 class ChatCreate(ChatBase):
     character_id: int
@@ -55,6 +58,7 @@ class ChatResponse(ChatBase):
     character_id: int
     created_at: datetime
     updated_at: datetime
+    is_saved: bool
 
     model_config = ConfigDict(from_attributes=True)
 

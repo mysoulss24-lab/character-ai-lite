@@ -36,7 +36,7 @@ def get_chat(db: Session, chat_id: int):
     return db.query(models.Chat).filter(models.Chat.id == chat_id).first()
 
 def get_chats(db: Session, skip: int = 0, limit: int = 100):
-    return db.query(models.Chat).order_by(models.Chat.updated_at.desc()).offset(skip).limit(limit).all()
+    return db.query(models.Chat).filter(models.Chat.is_saved == True).order_by(models.Chat.updated_at.desc()).offset(skip).limit(limit).all()
 
 def create_chat(db: Session, chat: schemas.ChatCreate):
     db_chat = models.Chat(**chat.model_dump())
@@ -59,6 +59,20 @@ def delete_chat(db: Session, chat_id: int):
         db.delete(db_chat)
         db.commit()
     return db_chat
+
+def save_chat(db: Session, chat_id: int):
+    db_chat = get_chat(db, chat_id)
+    if db_chat:
+        db_chat.is_saved = True
+        db.commit()
+        db.refresh(db_chat)
+    return db_chat
+
+def cleanup_temporary_chats(db: Session):
+    chats_to_delete = db.query(models.Chat).filter(models.Chat.is_saved == False).all()
+    for c in chats_to_delete:
+        db.delete(c)
+    db.commit()
 
 # Message CRUD
 def get_messages(db: Session, chat_id: int, limit: int = 20):

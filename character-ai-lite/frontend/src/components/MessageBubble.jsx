@@ -1,6 +1,26 @@
 export default function MessageBubble({ message, character }) {
   const isUser = message.role === 'user';
 
+  const formatMessageContent = (text) => {
+    if (isUser) return text;
+    
+    const regex = /(\*[^*]+\*|\([^)]+\)|\*\*[^*]+\*\*)/g;
+    const parts = text.split(regex);
+    
+    return parts.map((part, i) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        return <span key={i} className="font-bold">{part.slice(2, -2)}</span>;
+      }
+      if (part.startsWith('*') && part.endsWith('*')) {
+        return <span key={i} className="italic opacity-80">{part}</span>;
+      }
+      if (part.startsWith('(') && part.endsWith(')')) {
+        return <span key={i} className="italic opacity-80">{part}</span>;
+      }
+      return <span key={i}>{part}</span>;
+    });
+  };
+
   return (
     <div className={`flex w-full ${isUser ? 'justify-end' : 'justify-start'}`}>
       {!isUser && (
@@ -23,7 +43,7 @@ export default function MessageBubble({ message, character }) {
             ? 'bg-blue-600 text-white rounded-tr-none' 
             : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 shadow-sm rounded-tl-none border border-gray-100 dark:border-gray-700'
         }`}>
-          <div className="text-sm whitespace-pre-wrap leading-relaxed font-sans">{message.content}</div>
+          <div className="text-sm whitespace-pre-wrap leading-relaxed font-sans">{formatMessageContent(message.content)}</div>
         </div>
       </div>
     </div>

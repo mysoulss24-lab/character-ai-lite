@@ -1,12 +1,21 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import characters, chats, messages, settings
-from app.database import engine, Base
+from app.database import engine, Base, SessionLocal
+from app import crud
 
 # Create database tables
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Character AI Lite API")
+
+@app.on_event("startup")
+def startup_event():
+    db = SessionLocal()
+    try:
+        crud.cleanup_temporary_chats(db)
+    finally:
+        db.close()
 
 # Configure CORS for frontend access
 app.add_middleware(
