@@ -1,5 +1,4 @@
 import os
-from groq import Groq
 from app.core.config import settings
 from app.models import Character, Message, Settings
 from typing import List
@@ -81,13 +80,19 @@ def generate_ai_response(character: Character, history: List[Message], current_m
             return "(System: GROQ_API_KEY is not set. Please configure it in the .env file or settings.)"
             
         try:
-            client = Groq(api_key=settings.GROQ_API_KEY)
-            chat_completion = client.chat.completions.create(
-                messages=messages,
-                model="llama3-8b-8192", # Fast and reliable
-                temperature=0.7,
-            )
-            return chat_completion.choices[0].message.content
+            headers = {
+                "Authorization": f"Bearer {settings.GROQ_API_KEY}",
+                "Content-Type": "application/json"
+            }
+            data = {
+                "model": "llama3-8b-8192",
+                "messages": messages,
+                "temperature": 0.7
+            }
+            response = requests.post("https://api.groq.com/openai/v1/chat/completions", headers=headers, json=data)
+            response.raise_for_status()
+            result = response.json()
+            return result['choices'][0]['message']['content']
         except Exception as e:
             return f"(System Error: {str(e)})"
             

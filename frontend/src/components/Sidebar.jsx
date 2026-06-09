@@ -82,11 +82,21 @@ export default function Sidebar({ isOpen, setIsOpen }) {
         ))}
       </nav>
 
-      <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+      <div className="p-4 border-t border-gray-200 dark:border-gray-700 space-y-2">
         <Link to="/settings" onClick={() => setIsOpen(false)} className={`flex items-center space-x-2 p-2 rounded-lg transition-colors ${location.pathname === '/settings' ? 'bg-blue-50 text-blue-600 dark:bg-gray-700 dark:text-blue-400' : 'hover:bg-gray-100 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300'}`}>
           <Settings size={20} />
           <span>Settings</span>
         </Link>
+        <button 
+          onClick={() => {
+            localStorage.removeItem('isAuth');
+            window.location.reload();
+          }} 
+          className="w-full flex items-center space-x-2 p-2 rounded-lg transition-colors hover:bg-red-50 text-red-600 dark:hover:bg-red-900/30 dark:text-red-400"
+        >
+          <X size={20} />
+          <span>Logout</span>
+        </button>
       </div>
     </aside>
   );

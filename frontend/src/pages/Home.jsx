@@ -32,6 +32,17 @@ export default function Home({ toggleSidebar }) {
     }
   };
 
+  const handleDeleteCharacter = async (characterId) => {
+    if (window.confirm("আপনি কি নিশ্চিত যে আপনি এই ক্যারেক্টারটি ডিলিট করতে চান? (Are you sure you want to delete this character?)")) {
+      try {
+        await api.deleteCharacter(characterId);
+        setCharacters(characters.filter(c => c.id !== characterId));
+      } catch (err) {
+        console.error("Failed to delete character", err);
+      }
+    }
+  };
+
   const filteredCharacters = characters.filter(c => 
     c.name.toLowerCase().includes(search.toLowerCase()) || 
     c.description.toLowerCase().includes(search.toLowerCase())
@@ -68,7 +79,7 @@ export default function Home({ toggleSidebar }) {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {filteredCharacters.map(char => (
-                <CharacterCard key={char.id} character={char} onStartChat={handleStartChat} />
+                <CharacterCard key={char.id} character={char} onStartChat={handleStartChat} onDeleteCharacter={handleDeleteCharacter} />
               ))}
             </div>
           )}

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
-import { MessageSquare, Edit } from 'lucide-react';
+import { MessageSquare, Edit, Trash2 } from 'lucide-react';
 
-export default function CharacterCard({ character, onStartChat }) {
+export default function CharacterCard({ character, onStartChat, onDeleteCharacter }) {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-md transition-shadow group">
       <div className="h-32 bg-gradient-to-r from-blue-400 to-indigo-500 relative">
@@ -14,10 +14,13 @@ export default function CharacterCard({ character, onStartChat }) {
             </div>
           )}
         </div>
-        <div className="absolute top-2 right-2">
-          <Link to={`/character/${character.id}/edit`} className="p-2 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-sm transition-colors block text-white">
+        <div className="absolute top-2 right-2 flex space-x-2">
+          <Link to={`/character/${character.id}/edit`} className="p-2 bg-white/20 hover:bg-white/40 rounded-full backdrop-blur-sm transition-colors block text-white" title="Edit">
             <Edit size={16} />
           </Link>
+          <button onClick={() => onDeleteCharacter(character.id)} className="p-2 bg-red-500/80 hover:bg-red-600 rounded-full backdrop-blur-sm transition-colors block text-white" title="Delete">
+            <Trash2 size={16} />
+          </button>
         </div>
       </div>
       
