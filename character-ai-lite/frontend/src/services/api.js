@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-// Dynamically use the IP address or localhost depending on how the user accesses the site
-const currentHost = window.location.hostname;
-const BASE_URL = `http://${currentHost}:8000/api`;
+// Point to the live Render backend
+const BASE_URL = 'https://character-ai-lite.onrender.com/api';
 
 const apiClient = axios.create({
   baseURL: BASE_URL,
